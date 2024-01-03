@@ -167,8 +167,6 @@ class ConfigLoader:
     def load_config(self):
         """loads config from standard_config.yml and updates it with <experiment>.yml"""
         base_dir = realpath(join(dirname(__file__), '..'))
-        with open(join(base_dir, 'config', 'standard_config.yml'), 'r') as ymlfile:
-            config = yaml.safe_load(ymlfile)
         with open(join(base_dir, 'config', self.experiment + '.yml'), 'r') as ymlfile:
-            config = update_dict(config, yaml.safe_load(ymlfile))
+            config = yaml.safe_load(ymlfile)
         return config
