@@ -11,7 +11,7 @@ def create_table_description(config: ConfigLoader):
     n_sample_values = int(config.SAMPLING_RATE * config.SAMPLE_DURATION)
 
     table_description = {
-        COLUMN_MOUSE_ID: tables.Int16Col(),
+        COLUMN_MOUSE_ID: tables.StringCol(50),
         COLUMN_LABEL: tables.StringCol(10)
     }
     for c in config.CHANNELS:
