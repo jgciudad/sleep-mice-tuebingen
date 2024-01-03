@@ -2,7 +2,7 @@ import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.metrics import precision_score, recall_score, f1_score
+from sklearn.metrics import precision_score, recall_score, f1_score, balanced_accuracy_score
 
 from base.config_loader import ConfigLoader
 from base.evaluation.matrix_plotter import MatrixPlotter
@@ -91,6 +91,12 @@ class ResultLogger:
         Returns:
             dict: dict containing f1-scores for every stage and the average f1-score
          """
+        
+        # ignore artifacts in metrics
+        # actual_labels = actual_labels[actual_labels != 3]
+        # predicted_labels = predicted_labels[actual_labels != 3]
+        # nclasses = self.config.STAGES - 1
+
         f1_scores = {stage: 0 for stage in self.config.STAGES + ['avg']}
         n_labels = np.arange(len(self.config.STAGES))
 
@@ -114,8 +120,10 @@ class ResultLogger:
         f1_score_ss = f1_score(actual_labels, predicted_labels, average='macro', labels=n_labels)
         logger.info('average F1-score on sleep stages: {0:.3f}'.format(f1_score_ss))
         f1_scores['avg'] = f1_score_ss
+        balanced_accuracy = balanced_accuracy_score(actual_labels, predicted_labels)
+        logger.info('balanced accuracy on sleep stages ignoring ARTIFACT class: {0:.3f}'.format(balanced_accuracy))
 
-        return f1_scores
+        return f1_scores, balanced_accuracy
 
     def log_confusion_matrix(self, actual_labels, predicted_labels, dataset, wo_plot):
         """ logs and plots confusion matrices if `wo_plot`is False\n
