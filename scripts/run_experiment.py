@@ -54,7 +54,7 @@ def training():
 
     # save best results for early stopping and snapshot creation of best model
     best_epoch = 0
-    best_avg_f1_score = 0
+    best_bal_acc_score = 0
     # save metrics after each epoch for plots
     f1_scores = {'train': {stage: [] for stage in config.STAGES + ['avg']},
                  'valid': {stage: [] for stage in config.STAGES + ['avg']}}
@@ -76,18 +76,18 @@ def training():
 
         # calculate f1-scores for given validation and training labels and log them
         logger.logger.info('')
-        f1_scores_train = result_logger.log_sleep_stage_f1_scores(labels_train['actual'], labels_train['predicted'],
+        f1_scores_train, balanced_accuracy_train = result_logger.log_sleep_stage_f1_scores(labels_train['actual'], labels_train['predicted'],
                                                                   'train')
         for stage in f1_scores_train:
             f1_scores['train'][stage].append(f1_scores_train[stage])
 
-        f1_scores_valid = result_logger.log_sleep_stage_f1_scores(labels_valid['actual'], labels_valid['predicted'],
+        f1_scores_valid, balanced_accuracy_valid = result_logger.log_sleep_stage_f1_scores(labels_valid['actual'], labels_valid['predicted'],
                                                                   'valid')
         for stage in f1_scores_valid:
             f1_scores['valid'][stage].append(f1_scores_valid[stage])
 
         # model from the current epoch better than best model?
-        new_best_model = f1_scores_valid['avg'] > best_avg_f1_score
+        new_best_model = balanced_accuracy_valid > best_bal_acc_score
         # log/plot confusion and transformation matrices
         result_logger.log_confusion_matrix(labels_train['actual'], labels_train['predicted'], 'train', wo_plot=True)
         result_logger.log_confusion_matrix(labels_valid['actual'], labels_valid['predicted'], 'valid',
@@ -103,6 +103,7 @@ def training():
                 'model': config.MODEL_NAME,
                 'epoch': epoch,
                 'validation_avg_f1_score': f1_scores_valid['avg'],
+                'balanced_accuracy': balanced_accuracy_valid,
                 'state_dict': model.state_dict(),
                 'clas_optimizer': optimizer.state_dict(),
             }, config.EXTRA_SAFE_MODELS)
@@ -128,12 +129,14 @@ def training():
 
 
 if __name__ == '__main__':
-    args = parse()
-    config = ConfigLoader(args.experiment)  # load config from experiment
+    # args = parse()
+    # config = ConfigLoader(args.experiment)  # load config from experiment
+
+    config = ConfigLoader(experiment='kornum_config')
 
     logger = Logger(config)  # create wrapper for logger
     # create log_file and initialize it with the script arguments and the config
-    logger.init_log_file(args, basename(__file__))
+    # logger.init_log_file(args, basename(__file__))
 
     logger.fancy_log('start training with model: {}'.format(config.MODEL_NAME))
     training()
