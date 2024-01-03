@@ -42,8 +42,24 @@ def train(config, epoch, model, optimizer, trainloader):
 
         outputs = model(features)
 
-        criterion = nn.NLLLoss()
+        n_elements_per_class = torch.zeros(len(config.STAGES))
+        for c in range(len(config.STAGES)):
+            n_elements_per_class[c] = (labels==c).sum()
+
+        class_weigths = (labels.size()[0] - n_elements_per_class[3]) / (torch.count_nonzero(n_elements_per_class) * n_elements_per_class)
+        class_weigths[3] = 0
+        class_weigths2 = 1 / (torch.count_nonzero(n_elements_per_class) * n_elements_per_class)
+
+        weights_mask = torch.zeros(labels.size())
+        for c in range(len(config.STAGES)):
+            weights_mask[labels == c] = class_weigths[c]
+
+        criterion = nn.NLLLoss(reduction='none')
         loss = criterion(outputs, labels)
+
+        weighted_loss = weights_mask * loss
+
+        loss = torch.sum(weighted_loss) / (labels.size()[0] - n_elements_per_class[3])
 
         # L1 regularization
         reg_loss = 0
