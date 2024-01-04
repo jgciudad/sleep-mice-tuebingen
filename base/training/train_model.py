@@ -57,7 +57,7 @@ def train(config, epoch, model, optimizer, trainloader):
         criterion = nn.NLLLoss(reduction='none')
         loss = criterion(outputs, labels)
 
-        weighted_loss = weights_mask * loss
+        weighted_loss = weights_mask.to(config.DEVICE) * loss
 
         loss = torch.sum(weighted_loss) / (labels.size()[0] - n_elements_per_class[3])
 
