@@ -87,7 +87,7 @@ def training():
             f1_scores['valid'][stage].append(f1_scores_valid[stage])
 
         # model from the current epoch better than best model?
-        new_best_model = balanced_accuracy_valid > best_bal_acc_score
+        new_best_model = (balanced_accuracy_valid - best_bal_acc_score) >= 0.001
         # log/plot confusion and transformation matrices
         result_logger.log_confusion_matrix(labels_train['actual'], labels_train['predicted'], 'train', wo_plot=True)
         result_logger.log_confusion_matrix(labels_valid['actual'], labels_valid['predicted'], 'valid',
@@ -132,7 +132,7 @@ if __name__ == '__main__':
     # args = parse()
     # config = ConfigLoader(args.experiment)  # load config from experiment
 
-    config = ConfigLoader(experiment='kornum_config')
+    config = ConfigLoader(experiment='kornum_config_it1')
 
     logger = Logger(config)  # create wrapper for logger
     # create log_file and initialize it with the script arguments and the config
