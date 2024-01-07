@@ -1,0 +1,165 @@
+general:
+  device: 'cpu'
+
+dirs:
+  cache: '/home/s202283/code/sleep-mice-tuebingen/cache/dataset'  # directory for cached files like the tranformed data file (see experiment.data.file)
+  kornum_data: '/scratch/s202283/data/Laura-EEGdata_cleaned/'  # directory containing data
+  spindle_data: '/scratch/s202283/data/SPINDLE/original_data/'  # directory containing data
+
+data:
+  sample_duration: 4  # seconds
+  sampling_rate: 64  # Hz
+  scoring_map:
+    WAKE: [1, 17]
+    NREM: [3, 19]
+    REM: [2, 18]
+    ARTIFACT: [8, 24]
+  stage_map:
+    WAKE: 'WAKE'
+    REM: 'REM'
+    NREM: 'NREM'
+    ARTIFACT: 'ARTIFACT'
+
+experiment:
+  data:
+    split:
+      train: [
+        '2DTUSERVER-Alexandra/tsv/M23-b1.tsv', 
+        '2DTUSERVER-Alexandra/tsv/M23-b2.tsv',
+        '2DTUSERVER-Alexandra/tsv/M23-b3.tsv',
+        '2DTUSERVER-Alexandra/tsv/M29-b1.tsv',
+        '2DTUSERVER-Alexandra/tsv/M29-b2.tsv',
+        '2DTUSERVER-Alexandra/tsv/M29-b3.tsv',
+        '2DTUSERVER-Alexandra/tsv/M48-b1.tsv',
+        '2DTUSERVER-Alexandra/tsv/M48-b2.tsv',
+        '2DTUSERVER-Alexandra/tsv/M48-b3.tsv',
+        '2DTUSERVER-Alexandra/tsv/M52-b3.tsv',
+        '2DTUSERVER-Alexandra/tsv/M58-b1.tsv',
+        '2DTUSERVER-Alexandra/tsv/M58-b3.tsv',
+        '2DTUSERVER-CH/tsv/m1-b1.tsv',
+        '2DTUSERVER-CH/tsv/m11-b1.tsv',
+        '2DTUSERVER-CH/tsv/m14-b1.tsv',
+        '2DTUSERVER-CH/tsv/m14-r3.tsv',
+        '2DTUSERVER-CH/tsv/m15-r3.tsv',
+        '2DTUSERVER-CH/tsv/m2-b1.tsv',
+        '2DTUSERVER-CH/tsv/m4-b1.tsv',
+        '2DTUSERVER-CH/tsv/m5-b1.tsv',
+        '2DTUSERVER-CH/tsv/m6-r3.tsv',
+        '2DTUSERVER-CH/tsv/m7-b1.tsv',
+        '2DTUSERVER-CH/tsv/m8-b1.tsv',
+        '2DTUSERVER-CH/tsv/m8-r3.tsv',
+        '2DTUSERVER-LOUISE/tsv/M16-b2.tsv',
+        '2DTUSERVER-LOUISE/tsv/M16-b3.tsv',
+        '2DTUSERVER-LOUISE/tsv/M18-b3.tsv',
+        '2DTUSERVER-LOUISE/tsv/M309-b1.tsv',
+        '2DTUSERVER-Maria/tsv/m121-b1.tsv',
+        '2DTUSERVER-Maria/tsv/m121-b2.tsv',
+        '2DTUSERVER-Maria/tsv/m61-b1.tsv',
+        '2DTUSERVER-Maria/tsv/m63-b1.tsv',
+        '2DTUSERVER-Maria/tsv/m63-b2.tsv',
+        '2DTUSERVER-Maria/tsv/m88-b1.tsv',
+        '2DTUSERVER-Maria/tsv/m88-b2.tsv',
+        '2DTUSERVER-Maria/tsv/m96-b1.tsv',
+        '2DTUSERVER-Maria/tsv/m96-b2.tsv',
+        '2DTUSERVER-Marieke/tsv/m2-b1.tsv',
+        '2DTUSERVER-Marieke/tsv/m21-b1.tsv'
+      ]
+
+      valid: [
+        '2DTUSERVER-Alexandra/tsv/M52-b1.tsv',
+        '2DTUSERVER-CH/tsv/m12-b1.tsv',
+        '2DTUSERVER-CH/tsv/m3-b1.tsv',
+        '2DTUSERVER-LOUISE/tsv/M20-b3.tsv',
+        '2DTUSERVER-Maria/tsv/m86-b1.tsv'
+      ]
+
+      test: [
+        '2DTUSERVER-Alexandra/tsv/M52-b2.tsv',
+        '2DTUSERVER-Alexandra/tsv/M58-b2.tsv',
+        '2DTUSERVER-CH/tsv/m13-b1.tsv',
+        '2DTUSERVER-CH/tsv/m15-b1.tsv',
+        '2DTUSERVER-CH/tsv/m6-b1.tsv',
+        '2DTUSERVER-LOUISE/tsv/M18-b2.tsv',
+        '2DTUSERVER-LOUISE/tsv/M313-b1.tsv',
+        '2DTUSERVER-Maria/tsv/m61-b2.tsv',
+        '2DTUSERVER-Maria/tsv/m86-b2.tsv',
+        '2DTUSERVER-Maria/tsv/m94-b1.tsv',
+        '2DTUSERVER-Maria/tsv/m94-b2.tsv'
+      ]
+
+      spA_scorer1: [
+        'CohortA/scorings/A1.csv',
+        'CohortA/scorings/A2.csv',
+        'CohortA/scorings/A3.csv',
+        'CohortA/scorings/A4.csv'
+      ]
+
+      spA_scorer2: [
+        'CohortA/scorings/A1.csv',
+        'CohortA/scorings/A2.csv',
+        'CohortA/scorings/A3.csv',
+        'CohortA/scorings/A4.csv'
+      ]
+
+      spD_scorer1: [
+        'CohortD/scorings/D1.csv',
+        'CohortD/scorings/D2.csv',
+        'CohortD/scorings/D3.csv',
+        'CohortD/scorings/D4.csv',
+        'CohortD/scorings/D5.csv',
+        'CohortD/scorings/D6.csv'
+      ]
+
+      spD_scorer2: [
+        'CohortD/scorings/D1.csv',
+        'CohortD/scorings/D2.csv',
+        'CohortD/scorings/D3.csv',
+        'CohortD/scorings/D4.csv',
+        'CohortD/scorings/D5.csv',
+        'CohortD/scorings/D6.csv'
+      ]
+
+    file: 'data_kornum.h5'  # stored in cache dir
+    stages: ['WAKE', 'NREM', 'REM', 'ARTIFACT']
+    balanced_training: False
+    balancing_weights: [0.30, 0.18, 0.24, 0.14, 0.14]
+    channels: ['EEG1', 'EEG2', 'EMG']
+    samples_left: 1
+    samples_right: 1
+
+  training:
+    log_interval: 10  # in percent
+    additional_model_safe: false
+    batch_size: 256
+    data_fraction: 1.0
+    data_fraction_strat: null
+    epochs: 50
+    optimizer:
+      class: 'Adam'
+      l2_weight_decay: 1.e-4
+      scheduler:
+        warmup_epochs: 3
+        mode: 'exp'
+        parameters: [0.06]
+      learning_rate: 256.e-6
+      class: 'RMSprop'
+      parameters: {}
+      l1_weight_decay: 0
+      l2_weight_decay: 0
+
+  evaluation:
+    batch_size: 512
+
+  model:
+    filters: 96
+    classifier_dropout: [0.2, 0.2]
+    feature_extr_dropout: [0.0, 0.2, 0.0, 0.2, 0.0, 0.2, 0.0, 0.2]
+    name: 'model_8conv_2fc'
+
+  data_augmentation:
+    gain: 0.0
+    flip: 0.0
+    flip_all: 0.0
+    flip_hori: 0.0
+    window_warp_size: 0.0
+    time_shift: 0.0
