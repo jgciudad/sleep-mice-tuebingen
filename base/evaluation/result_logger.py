@@ -2,7 +2,7 @@ import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.metrics import precision_score, recall_score, f1_score, balanced_accuracy_score
+from sklearn.metrics import precision_score, recall_score, f1_score, balanced_accuracy_score, accuracy_score
 
 from base.config_loader import ConfigLoader
 from base.evaluation.matrix_plotter import MatrixPlotter
@@ -93,15 +93,14 @@ class ResultLogger:
          """
         
         # ignore artifacts in metrics
-        # actual_labels = actual_labels[actual_labels != 3]
-        # predicted_labels = predicted_labels[actual_labels != 3]
-        # nclasses = self.config.STAGES - 1
+        predicted_labels = predicted_labels[actual_labels != 3]
+        actual_labels = actual_labels[actual_labels != 3]
 
         f1_scores = {stage: 0 for stage in self.config.STAGES + ['avg']}
-        n_labels = np.arange(len(self.config.STAGES))
+        n_labels = np.arange(len(self.config.STAGES) - 1)
 
         logger.info('scores for sleep stages on dataset: {0!s}'.format(dataset))
-        for n, stage in enumerate(self.config.STAGES):
+        for n, stage in enumerate(self.config.STAGES[:-1]):
             # the f1-score of a stage only represents, whether the stage was classified correctly which reduces the
             # problem to a binary classificationof 'current stage' vs 'other stage'
             actual = [1 if act_label == n else 0 for act_label in actual_labels]
@@ -122,6 +121,8 @@ class ResultLogger:
         f1_scores['avg'] = f1_score_ss
         balanced_accuracy = balanced_accuracy_score(actual_labels, predicted_labels)
         logger.info('balanced accuracy on sleep stages ignoring ARTIFACT class: {0:.3f}'.format(balanced_accuracy))
+        accuracy = accuracy_score(actual_labels, predicted_labels)
+        logger.info('accuracy on sleep stages ignoring ARTIFACT class: {0:.3f}'.format(accuracy))
 
         return f1_scores, balanced_accuracy
 
