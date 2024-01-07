@@ -59,7 +59,8 @@ class ConfigLoader:
             makedirs(self.MODELS_DIR, exist_ok=True)
             makedirs(self.VISUALS_DIR, exist_ok=True)
 
-        self.DATA_DIR = realpath(config['dirs']['data'])
+        self.KORNUM_DATA_DIR = realpath(config['dirs']['kornum_data'])
+        self.SPINDLE_DATA_DIR = realpath(config['dirs']['spindle_data'])
         cache_dir = config['dirs']['cache']
         makedirs(cache_dir, exist_ok=True)
 
