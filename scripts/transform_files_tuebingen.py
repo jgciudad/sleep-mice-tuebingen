@@ -62,6 +62,8 @@ def load_raw_kornum_recording(label_path):
     data = mne.io.read_raw_edf(signal_path)
     raw_data = data.get_data()
     info = data.info
+
+    raw_data = (raw_data - np.mean(raw_data, axis=1, keepdims=True)) / np.std(np.std(raw_data, axis=1, keepdims=True))
     channels = data.ch_names
 
     features = {}
@@ -139,6 +141,8 @@ def load_raw_spindle_recording(label_path):
     data = mne.io.read_raw_edf(signal_path)
     raw_data = data.get_data()
     info = data.info
+
+    raw_data = (raw_data - np.mean(raw_data, axis=1, keepdims=True)) / np.std(np.std(raw_data, axis=1, keepdims=True))
     channels = data.ch_names
 
     features = {}
@@ -273,7 +277,7 @@ def transform():
     with tables.open_file(config.DATA_FILE, mode='w', title='data from Kornum') as f:
 
         # datasets to create, if there is a dataset without any data, an empty table is created inside DATA_FILE
-        datasets = ['train', 'valid', 'test', 'spA_scorer1', 'spA_scorer2', 'spD_scorer1', 'spD_scorer2']
+        datasets = ['train', 'valid', 'test', 'test_reduced', 'spA_scorer1', 'spA_scorer2', 'spD_scorer1', 'spD_scorer2']
 
         for dataset in datasets:
             print('writing', dataset, 'data...')
@@ -292,7 +296,7 @@ def transform():
                 # mouse_id = int(''.join(filter(str.isdigit, f_name)))
                 # read h5 file, load and downsample data
 
-                if dataset == 'train' or dataset == 'valid' or dataset == 'test': 
+                if dataset == 'train' or dataset == 'valid' or dataset == 'test' or dataset == 'test_reduced': 
                     features, labels, times, epoch_number = read_kornum_recording(label_path)
                 elif dataset == 'spA_scorer1' or dataset == 'spD_scorer1':
                     scorer = 1
@@ -312,7 +316,7 @@ def transform():
 if __name__ == '__main__':
     args = parse()
     # load config, dirs are not needed here, because we do not write a log
-    config = ConfigLoader(experiment='kornum_config', create_dirs=False)
+    config = ConfigLoader(experiment='kornum_config_it1', create_dirs=False)
 
     # transform files
     transform()
