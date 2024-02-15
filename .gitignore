@@ -1,6 +1,6 @@
 __pycache__/
 cache/
-results/**/models/
+results/
 *.pyc
 **/.pylint*
 .idea/
