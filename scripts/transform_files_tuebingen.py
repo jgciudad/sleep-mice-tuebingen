@@ -63,7 +63,6 @@ def load_raw_kornum_recording(label_path):
     raw_data = data.get_data()
     info = data.info
 
-    raw_data = (raw_data - np.mean(raw_data, axis=1, keepdims=True)) / np.std(raw_data, axis=1, keepdims=True)
     channels = data.ch_names
 
     features = {}
@@ -82,8 +81,12 @@ def load_raw_kornum_recording(label_path):
         elif channel == 'EMG EMG':
             c_name = 'EMG'
 
-        features[c_name] = downsample(raw_data[c, :], sr_old=info['sfreq'], sr_new=config.SAMPLING_RATE,
+        s = downsample(raw_data[c, :], sr_old=info['sfreq'], sr_new=config.SAMPLING_RATE,
                                             fmax=0.4 * config.SAMPLING_RATE, outtype='sos', method='pad')
+
+        s = (s - np.mean(s, keepdims=True)) / np.std(s, keepdims=True)
+
+        features[c_name] = s
 
     sample_start_times = np.arange(0, features[c_name].shape[0], config.SAMPLING_RATE*config.SAMPLE_DURATION, dtype=int)
 
@@ -142,7 +145,6 @@ def load_raw_spindle_recording(label_path):
     raw_data = data.get_data()
     info = data.info
 
-    raw_data = (raw_data - np.mean(raw_data, axis=1, keepdims=True)) / np.std(raw_data, axis=1, keepdims=True)
     channels = data.ch_names
 
     features = {}
@@ -154,8 +156,12 @@ def load_raw_spindle_recording(label_path):
         #     raise Exception("New number of samples is not integer")
                     # raw_data = scipy.signal.resample(x=raw_data, num=int(new_num_samples), axis=1)
 
-        features[channel] = downsample(raw_data[c, :], sr_old=info['sfreq'], sr_new=config.SAMPLING_RATE,
+        s = downsample(raw_data[c, :], sr_old=info['sfreq'], sr_new=config.SAMPLING_RATE,
                                             fmax=0.4 * config.SAMPLING_RATE, outtype='sos', method='pad')
+
+        s = (s - np.mean(s, keepdims=True)) / np.std(s, keepdims=True)
+
+        features[channel] = s
 
     sample_start_times = np.arange(0, features[channel].shape[0], config.SAMPLING_RATE*config.SAMPLE_DURATION, dtype=int)
 
