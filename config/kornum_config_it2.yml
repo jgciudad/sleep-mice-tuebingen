@@ -1,3 +1,5 @@
+# all the kornum_config files are the same. I created them because the results are saved with the name of the config file, so
+# different names are needed for the different iterations so the results are not overwritten.
 general:
   device: 'cpu'
 
@@ -83,6 +85,13 @@ experiment:
         '2DTUSERVER-LOUISE/tsv/M313-b1.tsv',
         '2DTUSERVER-Maria/tsv/m61-b2.tsv',
         '2DTUSERVER-Maria/tsv/m86-b2.tsv',
+        '2DTUSERVER-Maria/tsv/m94-b1.tsv',
+        '2DTUSERVER-Maria/tsv/m94-b2.tsv'
+      ]
+
+      test_reduced: [
+        '2DTUSERVER-CH/tsv/m13-b1.tsv',
+        '2DTUSERVER-LOUISE/tsv/M313-b1.tsv',
         '2DTUSERVER-Maria/tsv/m94-b1.tsv',
         '2DTUSERVER-Maria/tsv/m94-b2.tsv'
       ]
