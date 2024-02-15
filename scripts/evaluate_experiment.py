@@ -6,6 +6,7 @@ from importlib import import_module
 from os.path import basename, join, dirname, realpath, isfile
 import sklearn.metrics
 import numpy as np
+import openpyxl
 
 import torch
 import torch.utils.data as t_data
@@ -29,7 +30,7 @@ def parse():
     return parser.parse_args()
 
 
-def evaluation(dataset):
+def evaluation(dataset, c, r, excel_path):
     """evaluates best model in experiment on given dataset"""
     logger.fancy_log('start evaluation')
     result_logger = ResultLogger(config)
@@ -57,30 +58,64 @@ def evaluation(dataset):
     print(cm)
     kappa = sklearn.metrics.cohen_kappa_score(y1=true, y2=predicted, labels=np.arange(len(config.STAGES[:-1])))
     print(kappa)
+    
+    wb = openpyxl.load_workbook(excel_path)   
+    sheet = wb["Sheet1"]
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            sheet.cell(row = r + i, column = c + j).value = cm[i, j]
+    sheet.cell(row = r-1, column = c-3).value = kappa
+    wb.save(excel_path)
 
-    # log/plot results
-    result_logger.log_sleep_stage_f1_scores(labels['actual'], labels['predicted'], dataset)
-    logger.logger.info('')
-    result_logger.log_confusion_matrix(labels['actual'], labels['predicted'], dataset, wo_plot=False)
-    result_logger.log_transformation_matrix(labels['actual'], labels['predicted'], dataset,
-                                            wo_plot=False)
+    # # log/plot results
+    # result_logger.log_sleep_stage_f1_scores(labels['actual'], labels['predicted'], dataset)
+    # logger.logger.info('')
+    # result_logger.log_confusion_matrix(labels['actual'], labels['predicted'], dataset, wo_plot=False)
+    # result_logger.log_transformation_matrix(labels['actual'], labels['predicted'], dataset,
+    #                                         wo_plot=False)
 
-    logger.fancy_log('finished evaluation')
+    # logger.fancy_log('finished evaluation')
 
 
 if __name__ == '__main__':
     # args = parse()
     # config = ConfigLoader(args.experiment)  # load config from experiment
 
-    exp = 'kornum_config_it1'
-    config = ConfigLoader(experiment=exp)
+    excel_path = '/home/s202283/code/sleep-mice-tuebingen/grieger_reduced.xlsx'
+    exp = 'kornum_config_it3'
+    test_datasets = ['test_reduced', 'spA_scorer1', 'spA_scorer2', 'spD_scorer1', 'spD_scorer2']
 
-    logger = Logger(config)  # create wrapper for logger
-    # logger.init_log_file(args, basename(__file__))  # create log file and log config, etc
+    for d in test_datasets:
 
-    # dataset = args.dataset
-    dataset = 'test'
+        if d=='test_reduced':
+            c = 8
+        elif d=='spA_scorer1':
+            c = 19
+        elif d=='spA_scorer2':
+            c = 30
+        elif d=='spD_scorer1':
+            c = 41
+        elif d=='spD_scorer2':
+            c = 52
 
-    logger.fancy_log('evaluate best model of experiment {} on dataset {}'.format(exp, dataset))
-    # perform evaluation
-    evaluation(dataset)
+        if exp == 'kornum_config_it1':
+            r = 5
+        elif exp == 'kornum_config_it2':
+            r = 12
+        elif exp == 'kornum_config_it3':
+            r = 19
+        # else:
+        #     r=33
+
+        config = ConfigLoader(experiment=exp)
+
+        logger = Logger(config)  # create wrapper for logger
+        # logger.init_log_file(args, basename(__file__))  # create log file and log config, etc
+
+        # dataset = args.dataset
+        # dataset = 'test'
+
+        logger.fancy_log('evaluate best model of experiment {} on dataset {}'.format(exp, d))
+        # perform evaluation
+
+        evaluation(d, c, r, excel_path)
