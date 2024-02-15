@@ -63,7 +63,7 @@ def load_raw_kornum_recording(label_path):
     raw_data = data.get_data()
     info = data.info
 
-    raw_data = (raw_data - np.mean(raw_data, axis=1, keepdims=True)) / np.std(np.std(raw_data, axis=1, keepdims=True))
+    raw_data = (raw_data - np.mean(raw_data, axis=1, keepdims=True)) / np.std(raw_data, axis=1, keepdims=True)
     channels = data.ch_names
 
     features = {}
@@ -142,7 +142,7 @@ def load_raw_spindle_recording(label_path):
     raw_data = data.get_data()
     info = data.info
 
-    raw_data = (raw_data - np.mean(raw_data, axis=1, keepdims=True)) / np.std(np.std(raw_data, axis=1, keepdims=True))
+    raw_data = (raw_data - np.mean(raw_data, axis=1, keepdims=True)) / np.std(raw_data, axis=1, keepdims=True)
     channels = data.ch_names
 
     features = {}
